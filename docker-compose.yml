@@ -1,0 +1,21 @@
+services:
+  postgres:
+    image: postgres:16
+    container_name: webhook_engine_db
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: webhook
+      POSTGRES_PASSWORD: webhook_dev_pass
+      POSTGRES_DB: webhook_engine
+    ports:
+      - "5433:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U webhook -d webhook_engine"]
+      interval: 5s
+      timeout: 3s
+      retries: 5
+
+volumes:
+  pgdata:
